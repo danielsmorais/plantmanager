@@ -16,7 +16,7 @@
 <img src="src/assets/watering.png" width="100" align='left'/>
 
 Este projeto de aplicativo é para pessoas que possuem plantas e querem cuidar delas da melhor forma. O aplicativo é responsável de organizar o horário em que as plantas devem ser regadas, notificando o pai/mãe de planta a hora certa. 
-<br/>
+<br/><br/>
 
 # Tecnologias
 
