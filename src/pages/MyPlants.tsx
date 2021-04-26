@@ -53,6 +53,12 @@ export function MyPlants() {
         async function loadStorageData() {
             const plantsStoraged = await loadPlant();
 
+            if(plantsStoraged.length < 1){
+                setNextWatered('Nenhuma planta esperando para ser regada.');
+                setLoading(false);
+                return;
+            }
+
             const nextTime = formatDistance(
                 new Date(plantsStoraged[0].dateTimeNotification).getTime(),
                 new Date().getTime(),
