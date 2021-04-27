@@ -25,6 +25,29 @@ export function MyPlants() {
     const [loading, setLoading] = useState(true);
     const [nextWaterd, setNextWatered] = useState<String>();
 
+    async function loadStorageData() {
+        const plantsStoraged = await loadPlant();
+
+        if(plantsStoraged.length < 1){
+            setNextWatered('Nenhuma planta esperando para ser regada.');
+            setLoading(false);
+            return;
+        }
+
+        const nextTime = formatDistance(
+            new Date(plantsStoraged[0].dateTimeNotification).getTime(),
+            new Date().getTime(),
+            { locale: pt }
+        );
+
+        setNextWatered(
+            `Não esqueça de regar a ${plantsStoraged[0].name} à ${nextTime}.`
+        )
+
+        setMyPlants(plantsStoraged);
+        setLoading(false);
+    }
+
     function handleRemove(plant: PlantProps) {
         Alert.alert('Remover', `Deseja remover a ${plant.name}?`, [
             {
@@ -39,6 +62,8 @@ export function MyPlants() {
                         setMyPlants((oldData) =>
                             oldData.filter((item) => item.id != plant.id)
                         );
+                        
+                        loadStorageData();                        
 
                     } catch (error) {
                         Alert.alert('Não foi possível remover! 😢');
@@ -50,31 +75,7 @@ export function MyPlants() {
     }
 
     useEffect(() => {
-        async function loadStorageData() {
-            const plantsStoraged = await loadPlant();
-
-            if(plantsStoraged.length < 1){
-                setNextWatered('Nenhuma planta esperando para ser regada.');
-                setLoading(false);
-                return;
-            }
-
-            const nextTime = formatDistance(
-                new Date(plantsStoraged[0].dateTimeNotification).getTime(),
-                new Date().getTime(),
-                { locale: pt }
-            );
-
-            setNextWatered(
-                `Não esqueça de regar a ${plantsStoraged[0].name} às ${nextTime} horas.`
-            )
-
-            setMyPlants(plantsStoraged);
-            setLoading(false);
-        }
-
         loadStorageData();
-
     }, [])
 
     if (loading)
